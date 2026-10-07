@@ -5,7 +5,9 @@
       "context_from": null,
       "deliver": "local",
       "enabled": true,
-      "enabled_toolsets": null,
+      "enabled_toolsets": [
+        "file"
+      ],
       "id": "64291435d4e6",
       "model": null,
       "name": "kyozai-tick",

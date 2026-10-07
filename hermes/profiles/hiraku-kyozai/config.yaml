@@ -101,7 +101,7 @@ plugins:
   enabled: []
 agent:
   max_turns: 500
-  run_budget_seconds: 1200
+  run_budget_seconds: 2400
 _config_version: 46
 
 
@@ -111,3 +111,10 @@ cron:
   max_parallel_jobs: 12
 gateway:
   cron_only: true
+mcp_servers:
+  github-forest:
+    command: /opt/homebrew/bin/node
+    args:
+      - ~/github/com-junkawasaki/west-manifest/scripts/forest-maintenance.mjs
+      - mcp
+    lazy: true
