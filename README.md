@@ -31,6 +31,12 @@ workspace and run state stay on the host.
 | [`data/curriculum.json`](data/curriculum.json) | 教材のテーマ × 年代 × 言語のローテーション定義 |
 | [`data/safety.json`](data/safety.json) | 緊急時の相談窓口（全 bot が必ず案内する固定リスト）と、出力に含めてはいけない表現 |
 
+## 実行基盤
+
+3 profile とも **itonami-agent**（[kotoba-lang/itonami-agent](https://github.com/kotoba-lang/itonami-agent)）が cron を回す（`profile adopt` 済み、Hermes 側は `gateway.parked` で停止）。
+常駐: `~/Library/LaunchAgents/cloud.itonami.agent.gateway.plist`。配置は `[:peer :local]`（信頼済みピアがあればピア、無ければローカル）。
+Hermes に戻すときは `itonami-agent profile release <profile>`。
+
 ## LLM
 
 既定は kotoba LLM（`api.kotoba.cloud` / `qwen3.8-27b-whitehacker`）。落ちているときは
