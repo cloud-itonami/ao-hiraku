@@ -39,8 +39,7 @@ Hermes に戻すときは `itonami-agent profile release <profile>`。
 
 ## LLM
 
-既定は kotoba LLM（`api.kotoba.cloud` / `qwen3.8-27b-whitehacker`）。落ちているときは
-`openrouter-free` の `z-ai/glm-5.3-flash` にフォールバックする（config.yaml）。
+既定は kotoba LLM（`api.kotoba.cloud` / `qwen3.8-27b-whitehacker`）。落ちているときは `itonami-p2p`（このノード自身の rail → 信頼ピアの rail。例: メッシュ上の mishima）、最後に murakumo。第三者の中継（openrouter）には依存しない。
 
 ## Naming
 

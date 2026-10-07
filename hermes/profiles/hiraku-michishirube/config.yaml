@@ -1,5 +1,11 @@
 # Host-local blocks (command_allowlist, onboarding, secrets, skills, terminal) are kept on the host and omitted here.
 providers:
+  itonami-p2p:
+    # this node's itonami-agent peer server: own rails (~/.itonami/rails.edn),
+    # then trusted peers' rails. No third-party relay.
+    base_url: http://127.0.0.1:7420/v1
+    api_mode: chat_completions
+    request_timeout_seconds: 900
   murakumo:
     base_url: https://api.murakumo.cloud/v1
     api_mode: chat_completions
@@ -17,15 +23,6 @@ providers:
       X-OpenRouter-Title: Itonami By KotobaLabs
       X-Title: Itonami By KotobaLabs
     key_env: MURAKUMO_API_TOKEN
-  openrouter-free:
-    base_url: https://openrouter.ai/api/v1
-    api_mode: chat_completions
-    key_env: OPENROUTER_API_KEY
-    stale_timeout_seconds: 600
-    extra_headers:
-      HTTP-Referer: https://itonami.cloud
-      X-OpenRouter-Title: Itonami By KotobaLabs
-      X-Title: Itonami By KotobaLabs
   custom:
     models:
       glm-5.3-flash-cybersecurity-w4a16:
@@ -93,19 +90,13 @@ auxiliary:
     base_url: https://api.kotoba.cloud/v1
     model: qwen3.8-flash-next-whitehacker
     provider: kotoba
-openrouter:
-  response_cache: true
-  response_cache_ttl: 300
 fallback_providers:
+  - provider: itonami-p2p
+    model: auto
+    base_url: http://127.0.0.1:7420/v1
   - provider: murakumo
     model: murakumo/free
     base_url: https://api.murakumo.cloud/v1
-  - provider: murakumo
-    model: mishima
-    base_url: https://api.murakumo.cloud/v1
-  - provider: openrouter-free
-    model: z-ai/glm-5.3-flash
-    base_url: https://openrouter.ai/api/v1
 plugins:
   enabled: []
 agent:
