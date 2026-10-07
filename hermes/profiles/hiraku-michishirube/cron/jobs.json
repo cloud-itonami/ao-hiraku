@@ -5,7 +5,12 @@
       "context_from": null,
       "deliver": "local",
       "enabled": true,
-      "enabled_toolsets": null,
+      "enabled_toolsets": [
+        "terminal",
+        "file",
+        "web",
+        "skills"
+      ],
       "id": "c9e3790db757",
       "model": null,
       "name": "michishirube-tick",
