@@ -15,7 +15,18 @@ PROFILE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WS = os.path.join(PROFILE, "workspace")
 LEDGER = os.path.join(WS, "michishirube-ledger.jsonl")
 LINK_STATE = os.path.join(WS, "link-state.json")
-REPO = os.path.expanduser(os.environ.get("HIRAKU_REPO", "~/github/cloud-itonami/ao-hiraku"))
+def _find_repo():
+    """Where data/ lives: $HIRAKU_REPO, the ao-hiraku checkout, else the copy
+    bundled in the profile itself (how a peer node that runs this bot by
+    bundle CID, without the checkout, gets the catalog)."""
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    for c in (os.environ.get("HIRAKU_REPO"), "~/github/cloud-itonami/ao-hiraku", here):
+        if c and os.path.isfile(os.path.join(os.path.expanduser(c), "data", "catalog.json")):
+            return os.path.expanduser(c)
+    return here
+
+
+REPO = _find_repo()
 PROBES_PER_TICK = int(os.environ.get("HIRAKU_PROBES", "10"))
 RECHECK_SECONDS = 7 * 24 * 3600
 UA = "Mozilla/5.0 (compatible; itonami-hiraku-linkcheck/0.1; +https://itonami.cloud)"

@@ -10,7 +10,18 @@ Read-only; stores nothing about the person asking.
 """
 import argparse, json, os, sys
 
-REPO = os.path.expanduser(os.environ.get("HIRAKU_REPO", "~/github/cloud-itonami/ao-hiraku"))
+def _find_repo():
+    """Where data/ lives: $HIRAKU_REPO, the ao-hiraku checkout, else the copy
+    bundled in the profile itself (how a peer node that runs this bot by
+    bundle CID, without the checkout, gets the catalog)."""
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    for c in (os.environ.get("HIRAKU_REPO"), "~/github/cloud-itonami/ao-hiraku", here):
+        if c and os.path.isfile(os.path.join(os.path.expanduser(c), "data", "catalog.json")):
+            return os.path.expanduser(c)
+    return here
+
+
+REPO = _find_repo()
 
 
 def load(name):

@@ -16,7 +16,18 @@ WS = os.path.join(PROFILE, "workspace")
 KZ = os.path.join(WS, "kyozai")
 DIRS = {k: os.path.join(KZ, k) for k in ("drafts", "ready", "rejected")}
 LEDGER = os.path.join(WS, "kyozai-ledger.jsonl")
-REPO = os.path.expanduser(os.environ.get("HIRAKU_REPO", "~/github/cloud-itonami/ao-hiraku"))
+def _find_repo():
+    """Where data/ lives: $HIRAKU_REPO, the ao-hiraku checkout, else the copy
+    bundled in the profile itself (how a peer node that runs this bot by
+    bundle CID, without the checkout, gets the catalog)."""
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    for c in (os.environ.get("HIRAKU_REPO"), "~/github/cloud-itonami/ao-hiraku", here):
+        if c and os.path.isfile(os.path.join(os.path.expanduser(c), "data", "catalog.json")):
+            return os.path.expanduser(c)
+    return here
+
+
+REPO = _find_repo()
 MAX_REJECTS_PER_CELL = 3
 
 for d in DIRS.values():
