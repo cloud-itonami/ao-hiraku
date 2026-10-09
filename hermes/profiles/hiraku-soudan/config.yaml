@@ -102,6 +102,13 @@ plugins:
 agent:
   max_turns: 500
   run_budget_seconds: 1200
+  # no web access for the consultation bot: what a child or guardian types
+  # must not leave the host as a search query or a fetched URL
+  disabled_toolsets:
+  - web
+  - search
+  - browser
+  - x_search
 _config_version: 46
 
 
