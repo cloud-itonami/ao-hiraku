@@ -22,7 +22,7 @@
         "expr": "15 7 * * *",
         "display": "15 7 * * *"
       },
-      "script": "hiraku_catalog_audit.py",
+      "script": "hiraku_catalog_audit.hy",
       "skill": null,
       "skills": [],
       "workdir": null
