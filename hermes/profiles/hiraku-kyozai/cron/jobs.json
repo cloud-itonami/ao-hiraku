@@ -19,7 +19,7 @@
         "expr": "30 9,17 * * *",
         "display": "30 9,17 * * *"
       },
-      "script": "hiraku_kyozai_tick.py",
+      "script": "hiraku_kyozai_tick.hy",
       "skill": null,
       "skills": [],
       "workdir": null
