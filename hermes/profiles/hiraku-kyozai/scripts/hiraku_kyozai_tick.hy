@@ -141,7 +141,7 @@
 (for [path (sorted ((getattr glob "glob") ((getattr (getattr os "path") "join") (get DIRS "drafts") "*.md")))]
   (setv name ((getattr (getattr os "path") "basename") path))
   (if ((getattr (getattr os "path") "islink") path)
-    (do (print (% "GATE\\trefused\\t%s\\tsymlink" (tuple [name]))))
+    (do (print (% "GATE\trefused\t%s\tsymlink" (tuple [name]))))
     (do
       (with [f (open path :encoding "utf-8")] (setv text ((getattr f "read"))))
       (setv [fails fm] (gate text))
@@ -151,18 +151,18 @@
       (setv collision (or ((getattr (getattr os "path") "lexists") target_path)
                           (and fails ((getattr (getattr os "path") "lexists") reason_path))))
       (if collision
-        (do (print (% "GATE\\trefused\\t%s\\toutput-exists" (tuple [name]))))
+        (do (print (% "GATE\trefused\t%s\toutput-exists" (tuple [name]))))
         (if fails
           (do
             (setv failed ((getattr (__import__ "operator") "iadd") failed 1))
             ((getattr shutil "move") path target_path)
-            (with [f (open reason_path "w" :encoding "utf-8")] ((getattr f "write") (+ ((getattr "\\n" "join") fails) "\\n")))
-            (print (% "GATE\\tfail\\t%s\\t%s" (tuple [name ((getattr ";" "join") fails)])))
+            (with [f (open reason_path "w" :encoding "utf-8")] ((getattr f "write") (+ ((getattr "\n" "join") fails) "\n")))
+            (print (% "GATE\tfail\t%s\t%s" (tuple [name ((getattr ";" "join") fails)])))
           )
           (do
             (setv passed ((getattr (__import__ "operator") "iadd") passed 1))
             ((getattr shutil "move") path target_path)
-            (print (% "GATE\\tpass\\t%s\\t%s" (tuple [name (cell_key fm)])))
+            (print (% "GATE\tpass\t%s\t%s" (tuple [name (cell_key fm)])))
           )
         )
       )
