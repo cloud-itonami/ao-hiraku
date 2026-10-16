@@ -17,7 +17,7 @@
   (return here)
 )
 (setv REPO (_find_repo))
-(setv PROBES_PER_TICK (int ((getattr (getattr os "environ") "get") "HIRAKU_PROBES" "10")))
+(setv PROBES_PER_TICK (min 10 (max 0 (int ((getattr (getattr os "environ") "get") "HIRAKU_PROBES" "10")))))
 (setv RECHECK_SECONDS (* (* 7 24) 3600))
 (setv UA "Mozilla/5.0 (compatible; itonami-hiraku-linkcheck/0.1; +https://itonami.cloud)")
 ((getattr os "makedirs") ((getattr (getattr os "path") "join") WS "proposals") :exist_ok True)
@@ -52,7 +52,18 @@
 (setv entries (get catalog "entries"))
 (try
   (with [f (open LINK_STATE :encoding "utf-8")] (setv state ((getattr json "load") f)))
-  (except [Exception] (setv state {}))
+  (except [FileNotFoundError] (setv state {}))
+  (except [e Exception]
+    (m "link-state" (% "UNMEASURED %s" (getattr (type e) "__name__")))
+    ((getattr sys "exit") 1)
+  )
+)
+(if (not (isinstance state dict))
+  (do
+    (m "link-state" "UNMEASURED invalid-shape")
+    ((getattr sys "exit") 1)
+  )
+  None
 )
 (setv now ((getattr time "time")))
 (setv due (lfor e entries :if (and ((getattr e "get") "url") (> (- now ((getattr ((getattr state "get") (get e "id") {}) "get") "ts" 0)) RECHECK_SECONDS)) e))
