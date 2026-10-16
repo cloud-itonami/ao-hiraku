@@ -139,20 +139,33 @@
 (defn cell_key [fm] (return (% "%s|%s|%s" (tuple [((getattr fm "get") "theme") ((getattr fm "get") "stage") ((getattr fm "get") "lang")]))))
 (do (setv _kotoba_assign_32 0) (setv passed _kotoba_assign_32) (setv failed _kotoba_assign_32))
 (for [path (sorted ((getattr glob "glob") ((getattr (getattr os "path") "join") (get DIRS "drafts") "*.md")))]
-  (with [f (open path :encoding "utf-8")] (setv text ((getattr f "read"))))
-  (setv [fails fm] (gate text))
   (setv name ((getattr (getattr os "path") "basename") path))
-  (if fails
+  (if ((getattr (getattr os "path") "islink") path)
+    (do (print (% "GATE\\trefused\\t%s\\tsymlink" (tuple [name]))))
     (do
-      (setv failed ((getattr (__import__ "operator") "iadd") failed 1))
-      ((getattr shutil "move") path ((getattr (getattr os "path") "join") (get DIRS "rejected") name))
-      (with [f (open ((getattr (getattr os "path") "join") (get DIRS "rejected") (+ name ".reason")) "w" :encoding "utf-8")] ((getattr f "write") (+ ((getattr "\n" "join") fails) "\n")))
-      (print (% "GATE\tfail\t%s\t%s" (tuple [name ((getattr ";" "join") fails)])))
-    )
-    (do
-      (setv passed ((getattr (__import__ "operator") "iadd") passed 1))
-      ((getattr shutil "move") path ((getattr (getattr os "path") "join") (get DIRS "ready") name))
-      (print (% "GATE\tpass\t%s\t%s" (tuple [name (cell_key fm)])))
+      (with [f (open path :encoding "utf-8")] (setv text ((getattr f "read"))))
+      (setv [fails fm] (gate text))
+      (setv target_dir (get DIRS (if fails "rejected" "ready")))
+      (setv target_path ((getattr (getattr os "path") "join") target_dir name))
+      (setv reason_path (+ target_path ".reason"))
+      (setv collision (or ((getattr (getattr os "path") "lexists") target_path)
+                          (and fails ((getattr (getattr os "path") "lexists") reason_path))))
+      (if collision
+        (do (print (% "GATE\\trefused\\t%s\\toutput-exists" (tuple [name]))))
+        (if fails
+          (do
+            (setv failed ((getattr (__import__ "operator") "iadd") failed 1))
+            ((getattr shutil "move") path target_path)
+            (with [f (open reason_path "w" :encoding "utf-8")] ((getattr f "write") (+ ((getattr "\\n" "join") fails) "\\n")))
+            (print (% "GATE\\tfail\\t%s\\t%s" (tuple [name ((getattr ";" "join") fails)])))
+          )
+          (do
+            (setv passed ((getattr (__import__ "operator") "iadd") passed 1))
+            ((getattr shutil "move") path target_path)
+            (print (% "GATE\\tpass\\t%s\\t%s" (tuple [name (cell_key fm)])))
+          )
+        )
+      )
     )
   )
 )
