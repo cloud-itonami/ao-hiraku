@@ -39,7 +39,9 @@ Hermes に戻すときは `itonami-agent profile release <profile>`。
 
 ## LLM
 
-kotoba LLM（`api.kotoba.cloud`）と murakumo（`api.murakumo.cloud`）は**権威サーバとして健全な間だけ使い、依存はしない**: 失敗すると itonami-agent のサーキットブレーカーで一定時間スキップされ、`itonami-p2p`（このノード自身の rail → 信頼ピアの rail。例: メッシュ上の mishima）が回答する。推論の順番には常に `itonami-p2p` が入る。第三者の中継（openrouter）は使わない。
+Approved Itonami Hermes profiles use the locally hosted Mishima inference fleet through the Murakumo endpoint. Their effective configuration is `provider: murakumo`, `default: mishima`, and an empty `fallback_providers` list. OpenRouter, `murakumo/free`, Kotoba inference, and peer inference are not active fallback targets. Sending profile or session context to a nonlocal peer requires separate explicit owner approval.
+
+Cron jobs are currently run by `itonami-agent`; the Hermes gateway is parked. Saving a Hermes profile does not show that a job is registered or running.
 
 ## Naming
 
