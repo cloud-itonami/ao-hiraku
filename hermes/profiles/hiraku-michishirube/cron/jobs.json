@@ -15,7 +15,7 @@
       "model": "mishima",
       "name": "michishirube-tick",
       "no_agent": false,
-      "prompt": "hiraku-michishirube profile の SOUL.md に従う。注入された hiraku_catalog_audit.py の出力（MEASURE/PROBE/GAP 行）を読み、最も薄い GAP セル 1 つに合う無料・公的リソースを web で 1 件だけ確認して ~/.hermes/profiles/hiraku-michishirube/workspace/proposals/ に JSON で提案する。dead/error リンクは review 提案にする。未実測は UNMEASURED と報告。catalog.json は編集しない。",
+      "prompt": "hiraku-michishirube profile の SOUL.md に従う。注入された hiraku_catalog_audit.hy の出力（MEASURE/PROBE/GAP 行）を読み、最も薄い GAP セル 1 つに合う無料・公的リソースを web で 1 件だけ確認して ~/.hermes/profiles/hiraku-michishirube/workspace/proposals/ に JSON で提案する。dead/error リンクは review 提案にする。未実測は UNMEASURED と報告。catalog.json は編集しない。",
       "provider": "murakumo",
       "schedule": {
         "kind": "cron",
